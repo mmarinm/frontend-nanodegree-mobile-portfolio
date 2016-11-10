@@ -1,13 +1,14 @@
 /*eslint-env node */
 
-const gulp = require('gulp');
-const uglify = require('gulp-uglify');
-const rename = require('gulp-rename');
-const autoprefixer = require('gulp-autoprefixer');
-const imagemin = require('gulp-imagemin');
-const merge = require('merge-stream');
-const imageResize = require('gulp-image-resize');
-const cleanCSS = require('gulp-clean-css');
+const gulp = require('gulp'),
+  uglify = require('gulp-uglify'),
+  rename = require('gulp-rename'),
+  autoprefixer = require('gulp-autoprefixer'),
+  imagemin = require('gulp-imagemin'),
+  merge = require('merge-stream'),
+  imageResize = require('gulp-image-resize'),
+  cleanCSS = require('gulp-clean-css'),
+  cache = require('gulp-cache');
 
 gulp.task('scripts', function(){
     gulp.src('js/*.js')
@@ -39,10 +40,14 @@ gulp.task('imgresize', function () {
 
 gulp.task('images', function(){
     const imgfolder = gulp.src('img/*')
-    .pipe(imagemin())
+    .pipe(cache(imagemin({
+      interlaced: true
+    })))
     .pipe(gulp.dest('img'));
     const imgviews = gulp.src('views/images/*')
-    .pipe(imagemin())
+    .pipe(cache(imagemin({
+      interlaced: true
+    })))
     .pipe(gulp.dest('views/images'));
     return merge(imgfolder, imgviews);
 });
