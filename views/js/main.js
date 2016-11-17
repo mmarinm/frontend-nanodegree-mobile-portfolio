@@ -527,7 +527,7 @@ function update(){
   for (var i = 0; i < movers.length; i++) {
     var phase = Math.sin(scrollData / 1250 + (i % 5));
     // using transform to avoid Force synchronous layout
-    movers[i].style.transform = 'translate3D('+ (movers[i].basicLeft + 100 * phase - 0) +'px, 0px, 0px)';
+    movers[i].style.transform = 'translate3D('+ (movers[i].basicLeft + 100 * phase) +'px, 0px, 0px)';
   }
   // User Timing API to the rescue again. Seriously, it's worth learning.
   // Super easy to create custom metrics.
@@ -557,7 +557,7 @@ function calcNumofPizza(cols, height){
   if(height >= 1550){
     return cols * 7;
   }
-  else if(height < 1700 && height > 1300){
+  else if(height < 1550 && height > 1300){
     return cols * 6;
   }
   else{
@@ -567,13 +567,12 @@ function calcNumofPizza(cols, height){
 
 // Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', function() {
-  var browserWidth = window.innerWidth
-  var browserHeight = window.innerHeight;
-  console.log(browserWidth);
-  console.log(browserHeight);
-  var cols = pizzInRow(browserWidth);
-  var s = 256;
-  var numofpizzas = calcNumofPizza(cols, browserHeight);
+  var browserWidth = window.innerWidth,
+      browserHeight = window.innerHeight,
+      cols = pizzInRow(browserWidth),
+      s = 256,
+      numofpizzas = calcNumofPizza(cols, browserHeight);
+
   for (var i = 0; i < numofpizzas; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
@@ -584,5 +583,5 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
     document.querySelector("#movingPizzas1").appendChild(elem);
   }
-  update(browserWidth);
+  update();
 });
