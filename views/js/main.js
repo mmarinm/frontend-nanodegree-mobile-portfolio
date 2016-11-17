@@ -545,8 +545,10 @@ window.addEventListener('scroll', onScroll);
 
 //helper function that decides how many pizzas per row we need
 function pizzInRow(width){
-  if(width >= 990){
+  if(width >= 1367){
     return 8
+  } else if(width < 1367 && width >= 990){
+    return 6;
   } else{
     return 4
   }
@@ -572,13 +574,15 @@ document.addEventListener('DOMContentLoaded', function() {
       cols = pizzInRow(browserWidth),
       s = 256,
       numofpizzas = calcNumofPizza(cols, browserHeight);
+      console.log("width = " + browserWidth);
+      console.log("height = " + browserHeight);
 
   for (var i = 0; i < numofpizzas; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
-    elem.style.width = "73.333px";
+    elem.style.width = "100px"  //"73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
     document.querySelector("#movingPizzas1").appendChild(elem);
