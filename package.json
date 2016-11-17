@@ -17,9 +17,11 @@
   },
   "homepage": "https://github.com/mmarinm/frontend-nanodegree-mobile-portfolio.git#readme",
   "devDependencies": {
+    "browser-sync": "^2.17.6",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.1",
     "gulp-cache": "^0.4.5",
+    "gulp-concat-css": "^2.3.0",
     "gulp-image-resize": "^0.10.0",
     "gulp-imagemin": "^3.1.1",
     "gulp-sass": "^2.3.2",

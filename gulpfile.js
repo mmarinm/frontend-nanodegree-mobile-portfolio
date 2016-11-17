@@ -3,12 +3,18 @@
 const gulp = require('gulp'),
   uglify = require('gulp-uglify'),
   rename = require('gulp-rename'),
-  autoprefixer = require('gulp-autoprefixer'),
   imagemin = require('gulp-imagemin'),
   merge = require('merge-stream'),
   imageResize = require('gulp-image-resize'),
+  browserSync = require('browser-sync').create();
   cleanCSS = require('gulp-clean-css'),
-  cache = require('gulp-cache');
+  cache = require('gulp-cache'),
+  concatCss = require('gulp-concat-css');
+
+browserSync.init({
+    server:"./"
+});
+browserSync.stream();
 
 gulp.task('scripts', function(){
     gulp.src('js/*.js')
@@ -18,13 +24,13 @@ gulp.task('scripts', function(){
 });
 
 gulp.task('minify-css', function() {
-    return gulp.src('css/print.css')
-      .pipe(cleanCSS({debug: true}, function(details) {
+    gulp.src('css/*.css')
+    .pipe(concatCss('min.css'))
+    .pipe(cleanCSS({debug: true}, function(details) {
           console.log(details.name + ': ' + details.stats.originalSize);
           console.log(details.name + ': ' + details.stats.minifiedSize);
-      }))
-      .pipe(rename('min.css'))
-      .pipe(gulp.dest('style/'));
+    }))
+    .pipe(gulp.dest('style/'));
 });
 
 gulp.task('imgresize', function () {

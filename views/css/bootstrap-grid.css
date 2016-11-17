@@ -80,6 +80,9 @@ hr {
   .container {
     width: 970px;
   }
+  .mover{
+    margin-left: -600px;
+  }
 }
 @media (min-width: 1200px) {
   .container {

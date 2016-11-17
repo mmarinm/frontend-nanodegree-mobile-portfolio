@@ -1,16 +1,13 @@
+
 /*
 Welcome to the 60fps project! Your goal is to make Cam's Pizzeria website run
 jank-free at 60 frames per second.
-
 There are two major issues in this code that lead to sub-60fps performance. Can
 you spot and fix both?
-
-
 Built into the code, you'll find a few instances of the User Timing API
 (window.performance), which will be console.log()ing frame rate data into the
 browser console. To learn more about User Timing API, check out:
 http://www.html5rocks.com/en/tutorials/webperformance/usertiming/
-
 Creator:
 Cameron Pittman, Udacity Course Developer
 cameron *at* udacity *dot* com
@@ -496,17 +493,42 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 // The following code for sliding background pizzas was pulled from Ilya's demo found at:
 // https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
 
-// Moves the sliding background pizzas based on scroll position
-function updatePositions() {
+
+//create public variables to track data from dom
+var scrollData= 0,
+    ticking = false;
+
+
+/**
+ * Callback for our scroll event - just
+ * keeps track of the last scroll value
+ */
+function onScroll() {
+    scrollData = document.body.scrollTop;
+    requestTick();
+}
+
+//prevents firing of RAF when it's unnecessary
+function requestTick() {
+    if(!ticking) {
+        requestAnimationFrame(update);
+    }
+    ticking = true;
+}
+
+//does the work for animation RAF callback function
+function update(){
   frame++;
   window.performance.mark("mark_start_frame");
-
-  var items = document.querySelectorAll('.mover');
-  for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
-    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+  //grab all the moving pizzas in the array
+  movers = document.getElementsByClassName('mover');
+  ticking = false;
+  //loop throug moving pizzas and update their new positions
+  for (var i = 0; i < movers.length; i++) {
+    var phase = Math.sin(scrollData / 1250 + (i % 5));
+    // using transform to avoid Force synchronous layout
+    movers[i].style.transform = 'translate3D('+ (movers[i].basicLeft + 100 * phase - 0) +'px, 0px, 0px)';
   }
-
   // User Timing API to the rescue again. Seriously, it's worth learning.
   // Super easy to create custom metrics.
   window.performance.mark("mark_end_frame");
@@ -517,14 +539,42 @@ function updatePositions() {
   }
 }
 
-// runs updatePositions on scroll
-window.addEventListener('scroll', updatePositions);
+
+//on event scroll fire onScroll function
+window.addEventListener('scroll', onScroll);
+
+//helper function that decides how many pizzas per row we need
+function pizzInRow(width){
+  if(width >= 990){
+    return 8
+  } else{
+    return 4
+  }
+}
+
+//calculates number of pizzas that we need to create based on screen size
+function calcNumofPizza(cols, height){
+  if(height >= 1550){
+    return cols * 7;
+  }
+  else if(height < 1700 && height > 1300){
+    return cols * 6;
+  }
+  else{
+    return cols * 3;
+  }
+}
 
 // Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', function() {
-  var cols = 8;
+  var browserWidth = window.innerWidth
+  var browserHeight = window.innerHeight;
+  console.log(browserWidth);
+  console.log(browserHeight);
+  var cols = pizzInRow(browserWidth);
   var s = 256;
-  for (var i = 0; i < 200; i++) {
+  var numofpizzas = calcNumofPizza(cols, browserHeight);
+  for (var i = 0; i < numofpizzas; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
@@ -534,5 +584,5 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
     document.querySelector("#movingPizzas1").appendChild(elem);
   }
-  updatePositions();
+  update(browserWidth);
 });
