@@ -32,9 +32,10 @@ form {
 .mover {
   position: fixed;
   width: 256px;
-  z-index: -1; /*promotes it to its own layer*/
+  z-index: -1; promotes it to its own layer
 /*  transform:translateZ(0);
   will-change:transform;*/
+  backface-visibility: hidden;
 }
 
 .randomPizzaContainer {

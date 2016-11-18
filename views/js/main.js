@@ -395,10 +395,14 @@ var pizzaElementGenerator = function(i) {
   return pizzaContainer;
 };
 
+//get window width once
+var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
+console.log("windowWidth = " + windowWidth);
 // resizePizzas(size) is called when the slider in the "Our Pizzas" section of the website moves.
 var resizePizzas = function(size) {
   window.performance.mark("mark_start_resize");   // User Timing API function
-
+  //get mutablePizzas container from the DOM only once
+  var mutablePizzaContainer = document.getElementsByClassName("randomPizzaContainer");
   // Changes the value for the size of the pizza above the slider
   function changeSliderLabel(size) {
     switch(size) {
@@ -421,7 +425,6 @@ var resizePizzas = function(size) {
    // Returns the size difference to change a pizza element from one size to another. Called by changePizzaSlices(size).
   function determineDx (elem, size) {
     var oldWidth = elem.offsetWidth;
-    var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
     var oldSize = oldWidth / windowWidth;
 
     // Changes the slider value to a percent width
@@ -446,10 +449,10 @@ var resizePizzas = function(size) {
 
   // Iterates through pizza elements on the page and changes their widths
   function changePizzaSizes(size) {
-    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
-      var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
-      var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
-      document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
+    var dx = determineDx(mutablePizzaContainer[0], size);
+    var newwidth = (mutablePizzaContainer[0].offsetWidth + dx) + 'px';
+    for (var i = 0; i < mutablePizzaContainer.length; i++) {
+      mutablePizzaContainer[i].style.width = newwidth;
     }
   }
 
@@ -496,7 +499,10 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 
 //create public variables to track data from dom
 var scrollData= 0,
-    ticking = false;
+    ticking = false,
+    //grab  globaly all the moving pizzas in the array
+    movers = document.getElementsByClassName('mover'),
+    posChange;
 
 
 /**
@@ -520,14 +526,19 @@ function requestTick() {
 function update(){
   frame++;
   window.performance.mark("mark_start_frame");
-  //grab all the moving pizzas in the array
-  movers = document.getElementsByClassName('mover');
   ticking = false;
+  var phaseArr = [];
+  //calculate all multipliers
+  for(var j = 0; j < 5; j++){
+    phaseArr.push(100 * Math.sin(scrollData / 1250 + j));
+  }
+
   //loop throug moving pizzas and update their new positions
   for (var i = 0; i < movers.length; i++) {
-    var phase = Math.sin(scrollData / 1250 + (i % 5));
+    // var phase = Math.sin(scrollData / 1250 + (i % 5));
     // using transform to avoid Force synchronous layout
-    movers[i].style.transform = 'translate3D('+ (movers[i].basicLeft + 100 * phase) +'px, 0px, 0px)';
+    posChange = phaseArr[i % 5];
+    movers[i].style.transform = 'translate3D('+ (movers[i].basicLeft + posChange) +'px, 0px, 0px)';
   }
   // User Timing API to the rescue again. Seriously, it's worth learning.
   // Super easy to create custom metrics.
