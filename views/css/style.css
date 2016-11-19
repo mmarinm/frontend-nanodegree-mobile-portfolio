@@ -35,11 +35,14 @@ form {
   z-index: -1; promotes it to its own layer
 /*  transform:translateZ(0);
   will-change:transform;*/
+  -webkit-backface-visibility: hidden; /* Chrome, Safari, Opera */
   backface-visibility: hidden;
 }
 
 .randomPizzaContainer {
   float: left;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
 }
 
