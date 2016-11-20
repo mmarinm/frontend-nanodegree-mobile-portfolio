@@ -521,7 +521,7 @@ function update(){
   window.performance.mark("mark_start_frame");
   ticking = false;
   var phaseArr = [];
-  //calculate all multipliers
+  //calculate all multipliers and push them in array
   for(var j = 0; j < 5; j++){
     phaseArr.push(100 * Math.sin(scrollData / 1250 + j));
   }
@@ -578,17 +578,19 @@ document.addEventListener('DOMContentLoaded', function() {
       cols = pizzInRow(browserWidth),
       s = 256,
       numofpizzas = calcNumofPizza(cols, browserHeight),
-      elem = document.createElement('img'),
-      movingPizzas1 = document.getElementById("movingPizzas1");
+      // create movingPizzas var only once
+      movingPizzas = document.getElementById("movingPizzas1");
+      console.log(numofpizzas);
 
   for (var i = 0; i < numofpizzas; i++) {
+    var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    movingPizzas1.appendChild(elem);
+    movingPizzas.appendChild(elem);
   }
   update();
 });
