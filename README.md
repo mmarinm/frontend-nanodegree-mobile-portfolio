@@ -12,13 +12,13 @@ Optimized version of the portfolio
 
 * [Repository](https://github.com/mmarinm/frontend-nanodegree-mobile-portfolio)
 
-*[Live Site](https://mmarinm.github.io/frontend-nanodegree-mobile-portfolio/)
+* [Live Site](https://mmarinm.github.io/frontend-nanodegree-mobile-portfolio/)
 
 Original version of the portfolio
 
 * [Repository](https://github.com/udacity/frontend-nanodegree-mobile-portfolio)
 
-*[Live Site](http://cameronwp.github.io/udportfolio/)
+* [Live Site](http://cameronwp.github.io/udportfolio/)
 
 ## To Build Project Locally
 
@@ -71,7 +71,7 @@ Identify and perform optimizations to achieve a PageSpeed Insights score of 90 f
 * Removed computation of pizza size outside of loop in separate function sizeSwitcher()
 
 ### Optimized Scrolling 
-*[Image](https://github.com/mmarinm/frontend-nanodegree-mobile-portfolio/blob/master/ScrollingPerformanceShowcase.PNG) of scrolling performance before and after optimization
+* [Image](https://github.com/mmarinm/frontend-nanodegree-mobile-portfolio/blob/master/ScrollingPerformanceShowcase.PNG) of scrolling performance before and after optimization
 
 ### Time to resize Pizza
 
